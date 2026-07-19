@@ -468,6 +468,157 @@
     padding: 10px 14px;
   }
 
+  /* --- Tab navigation --- */
+  .tabnav{
+    display: flex;
+    gap: 4px;
+    margin-bottom: 36px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .tab-btn{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--ink-soft);
+    padding: 10px 14px 12px;
+    cursor: pointer;
+    margin-bottom: -1px;
+  }
+  .tab-btn:hover{ color: var(--teal-deep); }
+  .tab-btn.active{
+    color: var(--teal-deep);
+    border-bottom-color: var(--teal);
+    font-weight: 600;
+  }
+  .tab-btn:focus-visible{ outline: 2px solid var(--teal); outline-offset: 2px; }
+
+  .page{ display: none; }
+  .page.active{ display: block; }
+
+  .warn-block{
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--brick);
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .warn-block h3{
+    font-family: 'Spectral', serif;
+    font-size: 15px;
+    margin: 0 0 6px;
+  }
+  .warn-block p{ margin: 0; color: var(--ink-soft); font-size: 13.5px; }
+
+  /* --- Bouncing mascot (History tab) --- */
+  .ball-stage{
+    position: relative;
+    height: 130px;
+    background: linear-gradient(180deg, var(--gold-soft) 0%, var(--paper) 100%);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 22px;
+  }
+
+  .bounce-ball{
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 34% 28%, #FFF0BE 0%, var(--gold) 55%, #8C6A22 100%);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.18), 0 0 14px rgba(199,154,61,0.45);
+    will-change: transform;
+  }
+
+  .bounce-eye{
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: #241a08;
+    border-radius: 50%;
+    top: 16px;
+  }
+  .bounce-eye.left{ left: 12px; }
+  .bounce-eye.right{ left: 25px; }
+
+  .bounce-mouth{
+    position: absolute;
+    width: 12px;
+    height: 6px;
+    border: 2px solid #241a08;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    left: 16px;
+    top: 23px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .bounce-ball{ display: none; }
+  }
+
+  /* --- Symptoms grid --- */
+  .symptom-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 6px;
+  }
+
+  .symptom-tile{
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    text-align: left;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 8px 9px;
+    cursor: pointer;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .symptom-tile:hover{ border-color: var(--teal); }
+  .symptom-tile.active{
+    background: var(--teal-deep);
+    border-color: var(--teal-deep);
+    color: #fff;
+  }
+  .symptom-tile:focus-visible{ outline: 2px solid var(--teal); outline-offset: 2px; }
+
+  .care-tiers{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 14px;
+  }
+
+  .care-tier{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+  }
+  .care-tier.tier-self{ border-color: var(--teal); color: var(--teal-deep); }
+  .care-tier.tier-pharmacist{ border-color: var(--gold); color: var(--gold); }
+  .care-tier.tier-doctor{ border-color: var(--amber); color: var(--amber); }
+  .care-tier.tier-emergency{ border-color: var(--brick); color: var(--brick); background: var(--brick-soft); font-weight: 600; }
+
+  @media (max-width: 520px){
+    .tabnav{
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex-wrap: nowrap;
+    }
+    .tab-btn{ flex-shrink: 0; }
+  }
+
   footer{
     margin-top: 56px;
     font-size: 12px;
@@ -504,6 +655,15 @@
     </div>
   </header>
 
+  <nav class="tabnav" id="tabnav">
+    <button type="button" class="tab-btn" data-page="logging">Logging</button>
+    <button type="button" class="tab-btn" data-page="history">History</button>
+    <button type="button" class="tab-btn" data-page="symptoms">Symptoms</button>
+    <button type="button" class="tab-btn" data-page="advice">Advice</button>
+    <button type="button" class="tab-btn" data-page="warnings">Warnings</button>
+  </nav>
+
+  <div class="page" id="page-logging">
   <form class="panel" id="log-form">
     <h2>Log an entry</h2>
 
@@ -534,6 +694,16 @@
 
     <button type="submit" class="submit-btn">Log entry</button>
   </form>
+  </div>
+
+  <div class="page" id="page-history">
+  <div class="ball-stage" id="ball-stage">
+    <div class="bounce-ball" id="bounce-ball">
+      <div class="bounce-eye left"></div>
+      <div class="bounce-eye right"></div>
+      <div class="bounce-mouth"></div>
+    </div>
+  </div>
 
   <div class="stats" id="stats"></div>
 
@@ -545,7 +715,27 @@
     <div class="trace" id="trace"></div>
     <div class="empty" id="empty-state" hidden>No entries yet. Log your first one above.</div>
   </section>
+  </div>
 
+  <div class="page" id="page-symptoms">
+  <section>
+    <div class="history-head">
+      <h2>Symptoms</h2>
+      <div class="filters" id="symptom-filters"></div>
+    </div>
+    <p class="advice-suggestion" style="margin-bottom:16px;">General information only — this describes what a symptom commonly relates to and typical care levels. It does not diagnose you, and it never looks at your log.</p>
+    <div class="symptom-grid" id="symptom-grid"></div>
+    <div class="advice-card" id="symptom-detail" hidden style="margin-top:20px;">
+      <p class="advice-tag" id="symptom-detail-tag">Category</p>
+      <p class="entry-name" id="symptom-detail-name" style="font-size:17px; margin-bottom:8px;"></p>
+      <p class="advice-text" id="symptom-detail-info"></p>
+      <div class="care-tiers" id="symptom-detail-care"></div>
+      <p class="advice-disclaimer">General information only, not a diagnosis. If this is sudden, severe, or you're worried, contact a healthcare professional or emergency services.</p>
+    </div>
+  </section>
+  </div>
+
+  <div class="page" id="page-advice">
   <section class="advice">
     <div class="advice-head">
       <h2>Advice Corner</h2>
@@ -572,17 +762,276 @@
       <p class="advice-disclaimer">Not a recommendation for your specific symptoms. Always follow the package label and ask a pharmacist if you take other medication or have a health condition.</p>
     </div>
   </section>
+  </div>
 
-  <p class="ai-disclaimer">*AI should not be relied on. Nothing in this app is medical advice — always check product labels and consult a doctor or pharmacist for anything about medication, dosage, or diagnosis.</p>
+  <div class="page" id="page-warnings">
+  <section class="advice" style="margin-top:0; border-top:none; padding-top:0;">
+    <div class="advice-head">
+      <h2>Warnings &amp; Disclaimers</h2>
+    </div>
+
+    <p class="ai-disclaimer" style="margin-top:0;">*AI should not be relied on. Nothing in this app is medical advice — always check product labels and consult a doctor or pharmacist for anything about medication, dosage, or diagnosis.</p>
+
+    <div class="warn-block">
+      <h3>This is not a diagnosis</h3>
+      <p>Vital Log only records what you tell it. It does not analyze, diagnose, or interpret your symptoms in any medical sense.</p>
+    </div>
+
+    <div class="warn-block">
+      <h3>When to see someone</h3>
+      <p>Symptoms that are sudden, severe, or paired with things like chest pain or trouble breathing warrant prompt medical attention, not just tracking. If this is an emergency, contact emergency services immediately.</p>
+    </div>
+
+    <div class="warn-block">
+      <h3>About the Common Categories info</h3>
+      <p>Medicine information is general and the same for every visitor. It is not a recommendation for your specific symptoms and includes no dosages — always follow the package label and ask a pharmacist.</p>
+    </div>
+
+    <div class="warn-block">
+      <h3>Your data</h3>
+      <p>Entries are stored only in this browser (localStorage). Clearing your browser data will erase them. Nothing is sent anywhere.</p>
+    </div>
+  </section>
+  </div>
 
   <footer>
-    Entries are stored only in this browser (localStorage). Clearing your browser data will erase them. · Luxivivo
+    Luxivivo
   </footer>
 
 </div>
 
 <script>
 (function(){
+  // --- Tab navigation ---
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const pages = document.querySelectorAll('.page');
+
+  function showPage(name){
+    pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + name));
+    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.page === name));
+  }
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => showPage(btn.dataset.page));
+  });
+
+  showPage('logging');
+
+  // --- Bouncing gold mascot ---
+  const ballStage = document.getElementById('ball-stage');
+  const ball = document.getElementById('bounce-ball');
+  if(ballStage && ball && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    let x = 20, y = 10, vx = 1.6, vy = 0;
+    const gravity = 0.35;
+    const damping = 0.72;
+    const size = 44;
+
+    function step(){
+      const w = ballStage.clientWidth;
+      const h = ballStage.clientHeight;
+
+      vy += gravity;
+      x += vx;
+      y += vy;
+
+      if(x <= 0){ x = 0; vx = Math.abs(vx); }
+      if(x + size >= w){ x = w - size; vx = -Math.abs(vx); }
+      if(y + size >= h){ y = h - size; vy = -Math.abs(vy) * damping; if(Math.abs(vy) < 1) vy = -6; }
+      if(y <= 0){ y = 0; vy = Math.abs(vy); }
+
+      ball.style.transform = `translate(${x}px, ${y}px)`;
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // --- Symptoms reference (general info + general care level, no diagnosis) ---
+  const SYMPTOM_CATEGORIES = [
+    {
+      name: 'Growth & Development',
+      items: [
+        { name: 'Growth spurt', info: 'Rapid height or weight change is a normal part of puberty and adolescent development.', tiers: ['self'] },
+        { name: 'Voice changes', info: 'Voice deepening or cracking is a common, expected part of puberty.', tiers: ['self'] },
+        { name: 'Acne', info: 'Hormonal changes during puberty commonly increase oil production and breakouts.', tiers: ['self','pharmacist'] },
+        { name: 'Mood swings', info: 'Hormonal shifts during puberty and adolescence commonly affect mood.', tiers: ['self','doctor'] },
+        { name: 'Irregular periods (early)', info: 'Menstrual cycles are often irregular for the first couple of years after they start.', tiers: ['self','doctor'] },
+        { name: 'Body odor changes', info: 'Increased sweat gland activity during puberty is a normal development.', tiers: ['self'] },
+        { name: 'Breast development', info: 'Tenderness or asymmetry during development is common and usually resolves over time.', tiers: ['self','doctor'] },
+        { name: 'Rapid mood/energy shifts', info: 'Fluctuating energy and mood are common during adolescent hormonal changes.', tiers: ['self','doctor'] }
+      ]
+    },
+    {
+      name: 'Head & Neurological',
+      items: [
+        { name: 'Headache', info: 'Often linked to stress, dehydration, poor sleep, or eye strain.', tiers: ['self','pharmacist'] },
+        { name: 'Migraine', info: 'A recurring, often one-sided headache sometimes with light/sound sensitivity or visual changes.', tiers: ['self','doctor'] },
+        { name: 'Dizziness', info: 'Can relate to dehydration, low blood sugar, or standing up quickly.', tiers: ['self','doctor'] },
+        { name: 'Fainting', info: 'A brief loss of consciousness has many possible everyday and medical causes.', tiers: ['doctor','emergency'] },
+        { name: 'Memory lapses', info: 'Occasional forgetfulness is often linked to stress, poor sleep, or being overloaded.', tiers: ['self','doctor'] },
+        { name: 'Tingling / numbness', info: 'Often relates to posture or pressure on a nerve, but has other causes too.', tiers: ['self','doctor'] },
+        { name: 'Blurred vision', info: 'Can relate to eye strain, but sudden or one-sided changes are worth prompt attention.', tiers: ['doctor','emergency'] },
+        { name: 'Ringing in ears', info: 'Often linked to loud noise exposure or earwax buildup.', tiers: ['self','doctor'] }
+      ]
+    },
+    {
+      name: 'Respiratory',
+      items: [
+        { name: 'Cough', info: 'Commonly linked to colds, allergies, or irritation; usually resolves on its own.', tiers: ['self','pharmacist'] },
+        { name: 'Shortness of breath', info: 'Can range from exertion or anxiety to more serious causes, especially if sudden.', tiers: ['doctor','emergency'] },
+        { name: 'Sore throat', info: 'Frequently linked to colds, allergies, or dry air.', tiers: ['self','pharmacist'] },
+        { name: 'Congestion', info: 'Common with colds, allergies, or sinus irritation.', tiers: ['self','pharmacist'] },
+        { name: 'Wheezing', info: 'A whistling sound when breathing, often linked to airway narrowing.', tiers: ['doctor','emergency'] },
+        { name: 'Chest tightness', info: 'Has many possible causes ranging from muscle strain to more serious issues.', tiers: ['doctor','emergency'] }
+      ]
+    },
+    {
+      name: 'Digestive',
+      items: [
+        { name: 'Nausea', info: 'Commonly linked to what you\u2019ve eaten, stress, or minor infections.', tiers: ['self','pharmacist'] },
+        { name: 'Vomiting', info: 'Often accompanies stomach upset; prolonged vomiting risks dehydration.', tiers: ['self','doctor'] },
+        { name: 'Diarrhea', info: 'Frequently linked to diet, minor infections, or stress.', tiers: ['self','pharmacist'] },
+        { name: 'Constipation', info: 'Often related to diet, hydration, or activity levels.', tiers: ['self','pharmacist'] },
+        { name: 'Bloating', info: 'Commonly linked to diet or digestion speed.', tiers: ['self','pharmacist'] },
+        { name: 'Heartburn', info: 'A burning sensation often linked to diet or eating close to bedtime.', tiers: ['self','pharmacist'] },
+        { name: 'Abdominal pain', info: 'Has many possible causes; severity and location matter for how urgent it is.', tiers: ['self','doctor','emergency'] },
+        { name: 'Loss of appetite', info: 'Can relate to stress, minor illness, or other factors.', tiers: ['self','doctor'] }
+      ]
+    },
+    {
+      name: 'Musculoskeletal',
+      items: [
+        { name: 'Joint pain', info: 'Often linked to overuse, minor strain, or growth in younger people.', tiers: ['self','doctor'] },
+        { name: 'Muscle soreness', info: 'Commonly follows physical activity and usually eases with rest.', tiers: ['self'] },
+        { name: 'Back pain', info: 'Frequently linked to posture, strain, or how you\u2019ve been sitting or lifting.', tiers: ['self','doctor'] },
+        { name: 'Stiffness', info: 'Often relates to inactivity, sleep position, or minor strain.', tiers: ['self'] },
+        { name: 'Swelling', info: 'Can follow minor injury, but sudden or painful swelling is worth checking.', tiers: ['self','doctor'] },
+        { name: 'Cramps', info: 'Often linked to dehydration, activity, or electrolyte balance.', tiers: ['self','pharmacist'] }
+      ]
+    },
+    {
+      name: 'Skin',
+      items: [
+        { name: 'Rash', info: 'Can relate to irritation, allergies, or minor infections.', tiers: ['self','pharmacist','doctor'] },
+        { name: 'Itching', info: 'Commonly linked to dry skin, irritation, or allergies.', tiers: ['self','pharmacist'] },
+        { name: 'Dry skin', info: 'Often related to weather, hydration, or skincare routine.', tiers: ['self'] },
+        { name: 'Bruising easily', info: 'Usually minor, but frequent unexplained bruising is worth mentioning to a doctor.', tiers: ['self','doctor'] },
+        { name: 'Hives', info: 'Raised, itchy welts often linked to an allergic reaction.', tiers: ['pharmacist','doctor'] }
+      ]
+    },
+    {
+      name: 'Mental & Emotional',
+      items: [
+        { name: 'Anxiety', info: 'Everyday stress and worry are common; persistent or overwhelming anxiety is worth support.', tiers: ['self','doctor'] },
+        { name: 'Low mood', info: 'Can be a normal response to circumstances or something worth talking to someone about if it lingers.', tiers: ['self','doctor'] },
+        { name: 'Irritability', info: 'Often linked to stress, poor sleep, or being overloaded.', tiers: ['self'] },
+        { name: 'Trouble concentrating', info: 'Commonly linked to sleep, stress, or screen fatigue.', tiers: ['self','doctor'] },
+        { name: 'Sleep changes', info: 'Stress, routine changes, or screen use before bed commonly affect sleep.', tiers: ['self','doctor'] },
+        { name: 'Low energy', info: 'Often linked to sleep, diet, hydration, or stress levels.', tiers: ['self','doctor'] }
+      ]
+    },
+    {
+      name: 'Cardiovascular',
+      items: [
+        { name: 'Palpitations', info: 'A noticeable heartbeat, often linked to caffeine, stress, or exertion.', tiers: ['doctor'] },
+        { name: 'Chest pain', info: 'Has many possible causes; sudden or severe chest pain warrants urgent attention.', tiers: ['emergency'] },
+        { name: 'Cold hands/feet', info: 'Often relates to circulation and temperature, usually not concerning on its own.', tiers: ['self'] },
+        { name: 'Rapid heart rate', info: 'Can follow exertion, caffeine, or stress; persistent episodes are worth checking.', tiers: ['doctor'] },
+        { name: 'Leg swelling', info: 'Can relate to long periods of standing/sitting; sudden one-sided swelling is worth prompt attention.', tiers: ['doctor','emergency'] }
+      ]
+    },
+    {
+      name: 'General / Whole-body',
+      items: [
+        { name: 'Fatigue', info: 'Very commonly linked to sleep, diet, hydration, or stress.', tiers: ['self','doctor'] },
+        { name: 'Fever', info: 'Usually a sign the body is fighting something; height and duration matter.', tiers: ['self','doctor'] },
+        { name: 'Chills', info: 'Often accompanies fever or minor infection.', tiers: ['self','doctor'] },
+        { name: 'Night sweats', info: 'Can relate to room temperature, but frequent unexplained episodes are worth mentioning to a doctor.', tiers: ['doctor'] },
+        { name: 'Unexplained weight change', info: 'Worth discussing with a doctor if it happens without a clear diet or activity reason.', tiers: ['doctor'] },
+        { name: 'Dehydration signs', info: 'Thirst, dark urine, and fatigue are common early signs.', tiers: ['self','pharmacist'] }
+      ]
+    },
+    {
+      name: 'Reproductive & Urinary',
+      items: [
+        { name: 'Menstrual cramps', info: 'A common part of the menstrual cycle for many people.', tiers: ['self','pharmacist'] },
+        { name: 'Irregular periods', info: 'Can relate to stress, weight changes, or other factors; persistent irregularity is worth checking.', tiers: ['self','doctor'] },
+        { name: 'Pelvic pain', info: 'Has many possible causes; severity and timing matter.', tiers: ['self','doctor'] },
+        { name: 'Frequent urination', info: 'Can relate to fluid intake, but sudden changes are worth mentioning to a doctor.', tiers: ['self','doctor'] },
+        { name: 'Urinary discomfort', info: 'Often worth checking with a doctor, especially if it persists.', tiers: ['doctor'] }
+      ]
+    }
+  ];
+
+  const TIER_LABEL = {
+    self: 'Usually self-care',
+    pharmacist: 'Consider a pharmacist',
+    doctor: 'Consider a doctor',
+    emergency: 'Seek urgent/emergency care'
+  };
+
+  const symptomGrid = document.getElementById('symptom-grid');
+  const symptomFilters = document.getElementById('symptom-filters');
+  const symptomDetail = document.getElementById('symptom-detail');
+  const symptomDetailTag = document.getElementById('symptom-detail-tag');
+  const symptomDetailName = document.getElementById('symptom-detail-name');
+  const symptomDetailInfo = document.getElementById('symptom-detail-info');
+  const symptomDetailCare = document.getElementById('symptom-detail-care');
+
+  let activeSymptomCategory = 'All';
+
+  function buildSymptomFilters(){
+    const names = ['All', ...SYMPTOM_CATEGORIES.map(c => c.name)];
+    symptomFilters.innerHTML = '';
+    names.forEach(n => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip' + (n === activeSymptomCategory ? ' active' : '');
+      chip.textContent = n;
+      chip.addEventListener('click', () => { activeSymptomCategory = n; renderSymptomGrid(); });
+      symptomFilters.appendChild(chip);
+    });
+  }
+
+  function renderSymptomGrid(){
+    buildSymptomFilters();
+    symptomGrid.innerHTML = '';
+    const cats = activeSymptomCategory === 'All'
+      ? SYMPTOM_CATEGORIES
+      : SYMPTOM_CATEGORIES.filter(c => c.name === activeSymptomCategory);
+
+    cats.forEach(cat => {
+      cat.items.forEach(item => {
+        const tile = document.createElement('button');
+        tile.type = 'button';
+        tile.className = 'symptom-tile';
+        tile.textContent = item.name;
+        tile.addEventListener('click', () => {
+          symptomGrid.querySelectorAll('.symptom-tile').forEach(t => t.classList.remove('active'));
+          tile.classList.add('active');
+          showSymptomDetail(cat.name, item);
+        });
+        symptomGrid.appendChild(tile);
+      });
+    });
+  }
+
+  function showSymptomDetail(categoryName, item){
+    symptomDetail.hidden = false;
+    symptomDetailTag.textContent = categoryName;
+    symptomDetailName.textContent = item.name;
+    symptomDetailInfo.textContent = item.info;
+    symptomDetailCare.innerHTML = '';
+    item.tiers.forEach(t => {
+      const badge = document.createElement('span');
+      badge.className = 'care-tier tier-' + t;
+      badge.textContent = TIER_LABEL[t];
+      symptomDetailCare.appendChild(badge);
+    });
+    symptomDetail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  renderSymptomGrid();
+
   const STORAGE_KEY = 'vital-log-entries';
   const form = document.getElementById('log-form');
   const nameInput = document.getElementById('name');

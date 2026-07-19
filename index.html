@@ -468,63 +468,6 @@
     padding: 10px 14px;
   }
 
-  /* --- Tab navigation --- */
-  .tabnav{
-    display: flex;
-    gap: 4px;
-    margin-bottom: 36px;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .tab-btn{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-    letter-spacing: 0.02em;
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    color: var(--ink-soft);
-    padding: 10px 14px 12px;
-    cursor: pointer;
-    margin-bottom: -1px;
-  }
-  .tab-btn:hover{ color: var(--teal-deep); }
-  .tab-btn.active{
-    color: var(--teal-deep);
-    border-bottom-color: var(--teal);
-    font-weight: 600;
-  }
-  .tab-btn:focus-visible{ outline: 2px solid var(--teal); outline-offset: 2px; }
-
-  .page{ display: none; }
-  .page.active{ display: block; }
-
-  .warn-block{
-    background: var(--paper-raised);
-    border: 1px solid var(--line);
-    border-left: 3px solid var(--brick);
-    border-radius: 6px;
-    padding: 16px 18px;
-    margin-bottom: 16px;
-    font-size: 14px;
-    color: var(--ink);
-  }
-  .warn-block h3{
-    font-family: 'Spectral', serif;
-    font-size: 15px;
-    margin: 0 0 6px;
-  }
-  .warn-block p{ margin: 0; color: var(--ink-soft); font-size: 13.5px; }
-
-  @media (max-width: 520px){
-    .tabnav{
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      flex-wrap: nowrap;
-    }
-    .tab-btn{ flex-shrink: 0; }
-  }
-
   footer{
     margin-top: 56px;
     font-size: 12px;
@@ -561,14 +504,6 @@
     </div>
   </header>
 
-  <nav class="tabnav" id="tabnav">
-    <button type="button" class="tab-btn" data-page="logging">Logging</button>
-    <button type="button" class="tab-btn" data-page="history">History</button>
-    <button type="button" class="tab-btn" data-page="advice">Advice</button>
-    <button type="button" class="tab-btn" data-page="warnings">Warnings</button>
-  </nav>
-
-  <div class="page" id="page-logging">
   <form class="panel" id="log-form">
     <h2>Log an entry</h2>
 
@@ -599,9 +534,7 @@
 
     <button type="submit" class="submit-btn">Log entry</button>
   </form>
-  </div>
 
-  <div class="page" id="page-history">
   <div class="stats" id="stats"></div>
 
   <section>
@@ -612,9 +545,7 @@
     <div class="trace" id="trace"></div>
     <div class="empty" id="empty-state" hidden>No entries yet. Log your first one above.</div>
   </section>
-  </div>
 
-  <div class="page" id="page-advice">
   <section class="advice">
     <div class="advice-head">
       <h2>Advice Corner</h2>
@@ -641,61 +572,17 @@
       <p class="advice-disclaimer">Not a recommendation for your specific symptoms. Always follow the package label and ask a pharmacist if you take other medication or have a health condition.</p>
     </div>
   </section>
-  </div>
 
-  <div class="page" id="page-warnings">
-  <section class="advice" style="margin-top:0; border-top:none; padding-top:0;">
-    <div class="advice-head">
-      <h2>Warnings &amp; Disclaimers</h2>
-    </div>
-
-    <p class="ai-disclaimer" style="margin-top:0;">*AI should not be relied on. Nothing in this app is medical advice — always check product labels and consult a doctor or pharmacist for anything about medication, dosage, or diagnosis.</p>
-
-    <div class="warn-block">
-      <h3>This is not a diagnosis</h3>
-      <p>Vital Log only records what you tell it. It does not analyze, diagnose, or interpret your symptoms in any medical sense.</p>
-    </div>
-
-    <div class="warn-block">
-      <h3>When to see someone</h3>
-      <p>Symptoms that are sudden, severe, or paired with things like chest pain or trouble breathing warrant prompt medical attention, not just tracking. If this is an emergency, contact emergency services immediately.</p>
-    </div>
-
-    <div class="warn-block">
-      <h3>About the Common Categories info</h3>
-      <p>Medicine information is general and the same for every visitor. It is not a recommendation for your specific symptoms and includes no dosages — always follow the package label and ask a pharmacist.</p>
-    </div>
-
-    <div class="warn-block">
-      <h3>Your data</h3>
-      <p>Entries are stored only in this browser (localStorage). Clearing your browser data will erase them. Nothing is sent anywhere.</p>
-    </div>
-  </section>
-  </div>
+  <p class="ai-disclaimer">*AI should not be relied on. Nothing in this app is medical advice — always check product labels and consult a doctor or pharmacist for anything about medication, dosage, or diagnosis.</p>
 
   <footer>
-    Luxivivo
+    Entries are stored only in this browser (localStorage). Clearing your browser data will erase them. · Luxivivo
   </footer>
 
 </div>
 
 <script>
 (function(){
-  // --- Tab navigation ---
-  const tabButtons = document.querySelectorAll('.tab-btn');
-  const pages = document.querySelectorAll('.page');
-
-  function showPage(name){
-    pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + name));
-    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.page === name));
-  }
-
-  tabButtons.forEach(btn => {
-    btn.addEventListener('click', () => showPage(btn.dataset.page));
-  });
-
-  showPage('logging');
-
   const STORAGE_KEY = 'vital-log-entries';
   const form = document.getElementById('log-form');
   const nameInput = document.getElementById('name');

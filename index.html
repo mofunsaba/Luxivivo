@@ -562,51 +562,188 @@
   }
   .warn-block p{ margin: 0; color: var(--ink-soft); font-size: 13.5px; }
 
-  /* --- Bouncing mascot (History tab) --- */
-  .ball-stage{
+  /* --- Luxxy: floating mascot + review widget (site-wide) --- */
+  .luxxy-widget{
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    z-index: 40;
+  }
+
+  .luxxy-tooltip{
+    position: absolute;
+    bottom: 68px;
+    right: 0;
+    background: var(--ink);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    padding: 6px 11px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(4px);
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+  .luxxy-tooltip::after{
+    content: "";
+    position: absolute;
+    top: 100%;
+    right: 18px;
+    border: 5px solid transparent;
+    border-top-color: var(--ink);
+  }
+  .luxxy-widget:hover .luxxy-tooltip{ opacity: 1; transform: translateY(0); }
+
+  .luxxy-ball{
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    border: none;
+    cursor: pointer;
     position: relative;
-    height: 130px;
-    background: linear-gradient(180deg, var(--gold-soft) 0%, var(--paper) 100%);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 22px;
+    animation: luxxyIdle 3.4s ease-in-out infinite;
+  }
+  .luxxy-ball:hover{ transform: scale(1.06); box-shadow: 0 6px 16px rgba(0,0,0,0.22); }
+  .luxxy-ball:active{ transform: scale(0.94); }
+  .luxxy-ball:focus-visible{ outline: 2px solid var(--teal); outline-offset: 3px; }
+
+  @keyframes luxxyIdle{
+    0%, 100%{ transform: translateY(0); }
+    50%{ transform: translateY(-5px); }
   }
 
-  .bounce-ball{
+  .luxxy-eye{
     position: absolute;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 34% 28%, #FFF0BE 0%, var(--gold) 55%, #8C6A22 100%);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.18), 0 0 14px rgba(199,154,61,0.45);
-    will-change: transform;
-  }
-
-  .bounce-eye{
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    background: #241a08;
-    border-radius: 50%;
-    top: 16px;
-  }
-  .bounce-eye.left{ left: 12px; }
-  .bounce-eye.right{ left: 25px; }
-
-  .bounce-mouth{
-    position: absolute;
-    width: 12px;
+    width: 6px;
     height: 6px;
-    border: 2px solid #241a08;
-    border-top: none;
-    border-radius: 0 0 12px 12px;
-    left: 16px;
-    top: 23px;
+    background: #2A2013;
+    border-radius: 50%;
+    top: 20px;
+    transition: transform 0.08s ease;
   }
+  .luxxy-eye.left{ left: 17px; }
+  .luxxy-eye.right{ left: 31px; }
+  .luxxy-eye.blink{ transform: scaleY(0.15); }
+
+  .luxxy-smile{
+    position: absolute;
+    width: 14px;
+    height: 7px;
+    border: 2px solid #2A2013;
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    left: 20px;
+    top: 28px;
+  }
+
+  .luxxy-modal-backdrop{
+    position: fixed;
+    inset: 0;
+    background: rgba(32,43,36,0.35);
+    z-index: 45;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .luxxy-modal-backdrop.open{ opacity: 1; pointer-events: auto; }
+
+  .luxxy-modal{
+    position: fixed;
+    bottom: 90px;
+    right: 22px;
+    width: min(340px, calc(100vw - 44px));
+    max-height: min(70vh, 520px);
+    overflow-y: auto;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.22);
+    padding: 20px;
+    z-index: 46;
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .luxxy-modal.open{ opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+  .luxxy-modal-head{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 4px;
+  }
+  .luxxy-modal h3{
+    font-family: 'Spectral', serif;
+    font-size: 17px;
+    margin: 0;
+    color: var(--teal-deep);
+  }
+  .luxxy-modal .sub-line{
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 2px 0 14px;
+  }
+  .luxxy-close{
+    background: none;
+    border: none;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--ink-soft);
+    cursor: pointer;
+    padding: 2px 4px;
+  }
+  .luxxy-close:hover{ color: var(--brick); }
+
+  .star-row{ display: flex; gap: 4px; margin-bottom: 14px; }
+  .star-btn{
+    background: none;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--line);
+    padding: 0;
+  }
+  .star-btn.filled{ color: var(--gold); }
+  .star-btn:hover{ transform: scale(1.15); }
+
+  .luxxy-modal textarea{
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 9px 11px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: #fff;
+    min-height: 70px;
+    resize: vertical;
+    margin-bottom: 12px;
+  }
+
+  .luxxy-thanks{
+    text-align: center;
+    padding: 18px 4px;
+    animation: popIn 0.3s ease;
+  }
+  .luxxy-thanks .big-face{
+    width: 50px; height: 50px; margin: 0 auto 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    position: relative;
+  }
+
+  .review-list{ margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 12px; }
+  .review-item{ font-size: 13px; margin-bottom: 10px; }
+  .review-item .stars{ color: var(--gold); font-size: 12px; letter-spacing: 1px; }
+  .review-item p{ margin: 3px 0 0; color: var(--ink-soft); }
 
   @media (prefers-reduced-motion: reduce){
-    .bounce-ball{ display: none; }
+    .luxxy-ball{ animation: none; }
   }
 
   /* --- Symptoms grid --- */
@@ -748,14 +885,6 @@
   </div>
 
   <div class="page" id="page-history">
-  <div class="ball-stage" id="ball-stage">
-    <div class="bounce-ball" id="bounce-ball">
-      <div class="bounce-eye left"></div>
-      <div class="bounce-eye right"></div>
-      <div class="bounce-mouth"></div>
-    </div>
-  </div>
-
   <div class="stats" id="stats"></div>
 
   <section>
@@ -851,6 +980,20 @@
 
 </div>
 
+<div class="luxxy-widget" id="luxxy-widget">
+  <div class="luxxy-tooltip">Hi, I'm Luxxy — leave a review?</div>
+  <button type="button" class="luxxy-ball" id="luxxy-ball" aria-label="Open Luxxy — leave a review">
+    <div class="luxxy-eye left" id="luxxy-eye-left"></div>
+    <div class="luxxy-eye right" id="luxxy-eye-right"></div>
+    <div class="luxxy-smile"></div>
+  </button>
+</div>
+
+<div class="luxxy-modal-backdrop" id="luxxy-backdrop"></div>
+<div class="luxxy-modal" id="luxxy-modal" role="dialog" aria-label="Leave a review">
+  <div id="luxxy-modal-body"></div>
+</div>
+
 <script>
 (function(){
   // --- Tab navigation ---
@@ -868,46 +1011,145 @@
 
   showPage('logging');
 
-  // --- Bouncing gold mascot ---
-  const ballStage = document.getElementById('ball-stage');
-  const ball = document.getElementById('bounce-ball');
-  if(ballStage && ball && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    let x = 20, y = 10, vx = 1.6, vy = 0;
-    const gravity = 0.35;
-    const damping = 0.72;
-    const size = 44;
-    let squash = 1, stretch = 1;
+  // --- Luxxy: floating mascot + review widget (site-wide) ---
+  const luxxyBall = document.getElementById('luxxy-ball');
+  const luxxyEyeL = document.getElementById('luxxy-eye-left');
+  const luxxyEyeR = document.getElementById('luxxy-eye-right');
+  const luxxyBackdrop = document.getElementById('luxxy-backdrop');
+  const luxxyModal = document.getElementById('luxxy-modal');
+  const luxxyModalBody = document.getElementById('luxxy-modal-body');
+  const REVIEW_KEY = 'luxivivo-reviews-pending'; // local fallback only, used if the network request fails
+  const SUPABASE_URL = 'https://gysjyzoefbqtgxbuavph.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable__a1L9VSUDouZQGU9Wwjd0A_O8hEP3E9';
+  let selectedStars = 0;
 
-    function step(){
-      const w = ballStage.clientWidth;
-      const h = ballStage.clientHeight;
-
-      vy += gravity;
-      x += vx;
-      y += vy;
-
-      let bounced = false;
-      if(x <= 0){ x = 0; vx = Math.abs(vx); }
-      if(x + size >= w){ x = w - size; vx = -Math.abs(vx); }
-      if(y + size >= h){
-        y = h - size;
-        vy = -Math.abs(vy) * damping;
-        if(Math.abs(vy) < 1) vy = -6;
-        bounced = true;
-      }
-      if(y <= 0){ y = 0; vy = Math.abs(vy); }
-
-      // squash on impact, stretch mid-air based on speed
-      const targetSquash = bounced ? 1.28 : 1;
-      const targetStretch = bounced ? 0.75 : (1 + Math.min(Math.abs(vy), 10) * 0.012);
-      squash += (targetSquash - squash) * 0.35;
-      stretch += (targetStretch - stretch) * 0.25;
-
-      ball.style.transform = `translate(${x}px, ${y}px) scale(${1/squash * stretch}, ${squash / stretch})`;
-      requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
+  // idle blink, paused if reduced motion preferred
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    setInterval(() => {
+      luxxyEyeL.classList.add('blink');
+      luxxyEyeR.classList.add('blink');
+      setTimeout(() => {
+        luxxyEyeL.classList.remove('blink');
+        luxxyEyeR.classList.remove('blink');
+      }, 140);
+    }, 3200 + Math.random() * 2200);
   }
+
+  function savePendingReviewLocally(review){
+    try{
+      const raw = localStorage.getItem(REVIEW_KEY);
+      const list = raw ? JSON.parse(raw) : [];
+      list.push(review);
+      localStorage.setItem(REVIEW_KEY, JSON.stringify(list));
+    }catch(e){ console.error('Could not save review locally', e); }
+  }
+
+  async function submitReview(stars, text){
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ stars: stars, review_text: text })
+    });
+    if(!res.ok){
+      throw new Error('Request failed: ' + res.status);
+    }
+  }
+
+  function renderReviewForm(){
+    luxxyModalBody.innerHTML = `
+      <div class="luxxy-modal-head">
+        <h3>Leave a review</h3>
+        <button type="button" class="luxxy-close" id="luxxy-close-inner" aria-label="Close">&times;</button>
+      </div>
+      <p class="sub-line">Luxxy would love to know what you think of Luxivivo.</p>
+      <div class="star-row" id="star-row">
+        <button type="button" class="star-btn" data-value="1">\u2605</button>
+        <button type="button" class="star-btn" data-value="2">\u2605</button>
+        <button type="button" class="star-btn" data-value="3">\u2605</button>
+        <button type="button" class="star-btn" data-value="4">\u2605</button>
+        <button type="button" class="star-btn" data-value="5">\u2605</button>
+      </div>
+      <textarea id="review-text" placeholder="What's working, what's not..."></textarea>
+      <button type="button" class="submit-btn" id="review-submit">Send review</button>
+      <p class="sub-line" id="review-error" style="color: var(--brick); display:none; margin-top:8px;">Couldn't send that — saved on this device, we'll retry, or try again later.</p>
+    `;
+    wireReviewForm();
+  }
+
+  function wireReviewForm(){
+    const row = document.getElementById('star-row');
+    const text = document.getElementById('review-text');
+    const submit = document.getElementById('review-submit');
+    const closeBtn = document.getElementById('luxxy-close-inner');
+    const errorMsg = document.getElementById('review-error');
+
+    selectedStars = 0;
+    row.querySelectorAll('.star-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedStars = Number(btn.dataset.value);
+        row.querySelectorAll('.star-btn').forEach(b => {
+          b.classList.toggle('filled', Number(b.dataset.value) <= selectedStars);
+        });
+      });
+    });
+
+    submit.addEventListener('click', async () => {
+      if(selectedStars === 0){
+        row.style.animation = 'none';
+        void row.offsetWidth;
+        row.style.animation = 'popIn 0.3s ease';
+        return;
+      }
+      const reviewText = text.value.trim();
+      submit.disabled = true;
+      submit.textContent = 'Sending...';
+      errorMsg.style.display = 'none';
+
+      try{
+        await submitReview(selectedStars, reviewText);
+        showThankYou();
+      }catch(e){
+        console.error('Review submit failed', e);
+        savePendingReviewLocally({ stars: selectedStars, text: reviewText, when: new Date().toISOString() });
+        submit.disabled = false;
+        submit.textContent = 'Send review';
+        errorMsg.style.display = 'block';
+      }
+    });
+
+    closeBtn.addEventListener('click', closeLuxxyModal);
+  }
+
+  function showThankYou(){
+    luxxyModalBody.innerHTML = `
+      <div class="luxxy-thanks">
+        <div class="big-face"></div>
+        <h3 style="margin-bottom:6px;">Thanks for the review!</h3>
+        <p class="sub-line">Luxxy appreciates it.</p>
+        <button type="button" class="submit-btn" id="luxxy-done">Done</button>
+      </div>
+    `;
+    document.getElementById('luxxy-done').addEventListener('click', closeLuxxyModal);
+  }
+
+  function openLuxxyModal(){
+    renderReviewForm();
+    luxxyBackdrop.classList.add('open');
+    luxxyModal.classList.add('open');
+  }
+
+  function closeLuxxyModal(){
+    luxxyBackdrop.classList.remove('open');
+    luxxyModal.classList.remove('open');
+  }
+
+  luxxyBall.addEventListener('click', openLuxxyModal);
+  luxxyBackdrop.addEventListener('click', closeLuxxyModal);
 
   // --- Symptoms reference (general info + general care level, no diagnosis) ---
   const SYMPTOM_CATEGORIES = [
